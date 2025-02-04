@@ -187,8 +187,8 @@ def main():
         except Exception as e:
             st.error(f"An unexpected error occurred: {str(e)}")
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
 
 
 
