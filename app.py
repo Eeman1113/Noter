@@ -126,7 +126,7 @@ def main():
     st.markdown("Generate comprehensive study notes for any computer science topic")
     
     # User input
-    topic = st.text_input("Enter the topic you want to generate notes for", 
+    topic = st.text_input("Enter the topic you want to generate notes for (currently only works for computer science related topics)", 
                          help="Example: Data Structures, Machine Learning, Web Development")
     
     if st.button("🚀 Generate Comprehensive Notes") and topic:
