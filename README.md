@@ -1,6 +1,5 @@
-# Noter
+# Noter : Making Notes Re-thought
 
-## Noter: Making Notes Re-thought
 
 Noter is a smart note-making app designed to help students and learners create comprehensive study materials effortlessly. Originally developed for my girlfriend while she was learning Java, Noter has evolved into a powerful tool for generating structured and detailed notes on any computer science topic.
 
