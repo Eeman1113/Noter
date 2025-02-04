@@ -161,6 +161,7 @@ def main():
                     filename = save_notes_to_markdown(topic, index_content, detailed_notes)
                     if filename:
                         st.success(f"✅ Notes successfully generated and saved to {filename}")
+                        st.balloons()
                         
                         # Display notes in an expander
                         with st.expander("📖 View Complete Notes", expanded=True):
