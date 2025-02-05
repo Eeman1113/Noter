@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noter - Elegant Study Note Generator</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Base Styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f7f8fa;
+      color: #333;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    /* Container */
+    .container {
+      max-width: 800px;
+      margin: 3rem auto;
+      background: #ffffff;
+      padding: 2rem 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    p.subtitle {
+      text-align: center;
+      color: #7f8c8d;
+      margin-bottom: 2rem;
+    }
+    /* Form Elements */
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #34495e;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #e1e4e8;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border 0.3s;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #1E88E5;
+    }
+    button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #1E88E5;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #1565C0;
+    }
+    /* Spinner and Progress */
+    #spinner {
+      text-align: center;
+      margin: 1rem 0;
+      font-weight: 600;
+      color: #1E88E5;
+    }
+    .progress-container {
+      width: 100%;
+      background: #ecf0f1;
+      border-radius: 6px;
+      margin: 1rem 0;
+      overflow: hidden;
+      height: 8px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #1E88E5;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    /* Sections */
+    section {
+      margin-top: 2rem;
+    }
+    section h3 {
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+    pre {
+      background: #f1f3f5;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #e1e4e8;
+      margin: 1.5rem 0;
+    }
+    /* Collapsible Style */
+    .collapsible {
+      background-color: #1E88E5;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+    .collapsible:hover,
+    .collapsible.active {
+      background-color: #1565C0;
+    }
+    .content {
+      padding: 1rem;
+      display: none;
+      overflow: hidden;
+      background-color: #f9f9f9;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+    }
+    /* Download Button */
+    #downloadBtn {
+      margin-top: 1.5rem;
+      background-color: #27ae60;
+    }
+    #downloadBtn:hover {
+      background-color: #1e8449;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📚 Noter ノート</h1>
+    <p class="subtitle">Generate comprehensive study notes for any computer science topic</p>
+    
+    <!-- Topic Input Form -->
+    <form id="topicForm">
+      <label for="topic">Enter Topic <small style="font-weight:300; color:#95a5a6;">(e.g., Data Structures, Machine Learning)</small></label>
+      <input type="text" id="topic" placeholder="Your topic here..." required />
+      <button type="submit">🚀 Generate Notes</button>
+    </form>
+
+    <!-- Spinner / Status -->
+    <div id="spinner" style="display: none;">Loading...</div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-container" id="progressContainer" style="display: none;">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Generated Index Section -->
+    <section id="indexSection" style="display: none;">
+      <h3>📑 Generated Index</h3>
+      <pre id="indexContent"></pre>
+    </section>
+
+    <!-- Detailed Notes Section -->
+    <section id="notesSection" style="display: none;">
+      <h3>Detailed Notes</h3>
+      <div id="notesContainer"></div>
+    </section>
+
+    <!-- Collapsible Section to View Complete Notes -->
+    <button type="button" class="collapsible" id="toggleNotes" style="display: none;">📖 View Complete Notes</button>
+    <div class="content" id="completeNotesContent"></div>
+
+    <!-- Download Button -->
+    <button id="downloadBtn" style="display: none;">📥 Download Notes</button>
+  </div>
+
+  <script>
+    document.getElementById('topicForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const topic = document.getElementById('topic').value.trim();
+      if (!topic) {
+        alert("Please enter a topic.");
+        return;
+      }
+      
+      // Reset UI
+      document.getElementById('indexSection').style.display = 'none';
+      document.getElementById('notesSection').style.display = 'none';
+      document.getElementById('toggleNotes').style.display = 'none';
+      document.getElementById('downloadBtn').style.display = 'none';
+      document.getElementById('completeNotesContent').innerHTML = '';
+      document.getElementById('notesContainer').innerHTML = '';
+      updateProgress(0);
+      document.getElementById('progressContainer').style.display = 'block';
+
+      const spinner = document.getElementById('spinner');
+      spinner.style.display = 'block';
+      spinner.textContent = "Analyzing topic and generating index...";
+
+      try {
+        // Simulate generating the index (replace with your API call)
+        const indexContent = await generateIndex(topic);
+        document.getElementById('indexContent').textContent = indexContent;
+        document.getElementById('indexSection').style.display = 'block';
+
+        // Split index by '##' delimiter
+        const headers = indexContent.split('##').filter(h => h.trim() !== '').map(h => h.trim());
+        const detailedNotes = {};
+
+        // Generate detailed notes for each header sequentially
+        for (let i = 0; i < headers.length; i++) {
+          spinner.textContent = `Generating notes for: ${headers[i]}`;
+          updateProgress(((i + 1) / headers.length) * 100);
+          const note = await generateNotesForHeader(headers[i], topic);
+          detailedNotes[headers[i]] = note;
+
+          // Append note section
+          const noteDiv = document.createElement('div');
+          noteDiv.style.marginBottom = '1.5rem';
+          noteDiv.innerHTML = `<h4 style="color:#2c3e50; font-weight:600;">${headers[i]}</h4>
+                               <pre>${note}</pre>
+                               <hr>`;
+          document.getElementById('notesContainer').appendChild(noteDiv);
+        }
+        document.getElementById('notesSection').style.display = 'block';
+
+        spinner.style.display = 'none';
+
+        // Generate complete markdown for download and collapsible view
+        const markdownContent = generateMarkdown(topic, indexContent, detailedNotes);
+        const completeContentDiv = document.getElementById('completeNotesContent');
+        completeContentDiv.innerHTML = `<pre>${markdownContent}</pre>`;
+        document.getElementById('toggleNotes').style.display = 'block';
+
+        // Setup Download Button
+        const blob = new Blob([markdownContent], { type: "text/markdown" });
+        const url = URL.createObjectURL(blob);
+        const downloadBtn = document.getElementById('downloadBtn');
+        downloadBtn.style.display = 'inline-block';
+        downloadBtn.onclick = function () {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = topic.toLowerCase().replace(/\s+/g, '_') + '_notes.md';
+          a.click();
+        };
+
+      } catch (error) {
+        console.error("Error generating notes:", error);
+        alert("An error occurred while generating notes.");
+      } finally {
+        spinner.style.display = 'none';
+        updateProgress(100);
+      }
+    });
+
+    // Simulated function for generating index content
+    async function generateIndex(topic) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // Dummy index with markdown headers
+          const dummyIndex = "## Introduction\n## Core Concepts\n## Applications\n## Challenges\n## Best Practices";
+          resolve(dummyIndex);
+        }, 1000);
+      });
+    }
+
+    // Simulated function for generating detailed notes for a header
+    async function generateNotesForHeader(header, topic) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const dummyNote = `Detailed educational notes for ${header} in the context of ${topic}. Includes explanations, examples, code snippets, and common pitfalls.`;
+          resolve(dummyNote);
+        }, 1200);
+      });
+    }
+
+    // Generate Markdown content for download
+    function generateMarkdown(topic, indexContent, detailedNotes) {
+      let md = `# Complete Study Guide: ${topic}\n\n`;
+      md += `*Generated on: ${new Date().toLocaleString()}*\n\n`;
+      md += `---\n\n`;
+      md += `# Table of Contents\n\n`;
+      md += indexContent + `\n\n`;
+      md += `---\n\n`;
+      md += `# Detailed Notes\n\n`;
+      for (const header in detailedNotes) {
+        md += `## ${header}\n\n`;
+        md += detailedNotes[header] + `\n\n`;
+        md += `---\n\n`;
+      }
+      md += `\n\n## Additional Resources\n\n`;
+      md += `- Practice exercises and problems can be found in the respective sections\n`;
+      md += `- Refer to the official documentation for more detailed information\n`;
+      md += `- Join online communities for further discussion\n`;
+      return md;
+    }
+
+    // Update the progress bar
+    function updateProgress(percent) {
+      document.getElementById('progressBar').style.width = percent + '%';
+    }
+
+    // Collapsible section for complete notes
+    document.getElementById("toggleNotes").addEventListener("click", function () {
+      this.classList.toggle("active");
+      const content = document.getElementById("completeNotesContent");
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
